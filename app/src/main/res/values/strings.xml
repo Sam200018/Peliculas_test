@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Peliculas</string>
+    <string name="top_movies_label">Peliculas Top</string>
+    <string name="on_cinema_label">En Cartelera</string>
 </resources>
