@@ -71,15 +71,18 @@ fun MovieSuccess(modifier: Modifier = Modifier, movieResponse: MovieResponse) {
 @Composable
 fun RatingStars(
     modifier: Modifier = Modifier,
-    rating: Double, maxRating: Int = 5
+    rating: Double,
+    maxRating: Int = 5
 ) {
+    val auxRating = (rating * maxRating) / 10
+
     Row(
         modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
         repeat(maxRating) { index ->
-            val color = if (index < rating) AccentYellow else Color.Black
+            val color = if (index < auxRating) AccentYellow else Color.Black
             Icon(
                 imageVector = Icons.Filled.Star,
                 contentDescription = null,
