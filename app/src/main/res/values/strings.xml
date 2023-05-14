@@ -6,4 +6,5 @@
     <string name="failed_to_load">Failed to Load</string>
     <string name="retry">Retry</string>
     <string name="details">Detalles</string>
+    <string name="search_field_label">Buscar pelicula</string>
 </resources>
