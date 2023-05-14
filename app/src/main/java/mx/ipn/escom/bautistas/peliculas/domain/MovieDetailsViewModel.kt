@@ -1,6 +1,5 @@
 package mx.ipn.escom.bautistas.peliculas.domain
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import kotlinx.coroutines.launch
 import mx.ipn.escom.bautistas.peliculas.PeliculasApplication
+import mx.ipn.escom.bautistas.peliculas.data.PeliculasDao
 import mx.ipn.escom.bautistas.peliculas.data.PeliculasRepository
 import mx.ipn.escom.bautistas.peliculas.model.MovieResponse
 import java.io.IOException
@@ -25,7 +25,9 @@ sealed interface MovieDetailUiState {
 
 
 class MovieDetailsViewModel(
-    private val peliculasRepository: PeliculasRepository, private val idPelicula: String
+    private val peliculasRepository: PeliculasRepository,
+    private val peliculasDao: PeliculasDao,
+    private val idPelicula: String
 ) : ViewModel() {
     private val API_KEY: String = "4a428a2deefcff39097ea4a9d69f62c8"
     var movieDetailUiState: MovieDetailUiState by mutableStateOf(MovieDetailUiState.Loading)
@@ -39,11 +41,33 @@ class MovieDetailsViewModel(
     private fun getMovieDetail() {
         viewModelScope.launch {
             movieDetailUiState = try {
-                Log.i("movie_id", idPelicula)
                 val result = peliculasRepository.getMovieDetail(idPelicula.toInt(), API_KEY)
                 MovieDetailUiState.Success(result)
             } catch (e: IOException) {
-                MovieDetailUiState.Error
+                val localResponse = peliculasDao.getMoveById(idPelicula.toInt())
+                val pelicula = MovieResponse(
+                    adult = false,
+                    budget = 10,
+                    genres = listOf(),
+                    id = localResponse.id.toLong(),
+                    originalLanguage = "",
+                    originalTitle = localResponse.originalTitle,
+                    overview = localResponse.overview,
+                    popularity = 20.0,
+                    posterPath = localResponse.posterPath,
+                    productionCompanies = listOf(),
+                    productionCountries = listOf(),
+                    releaseDate = "",
+                    revenue = 1,
+                    spokenLanguages = listOf(),
+                    status = "",
+                    title = localResponse.title,
+                    video = false,
+                    voteAverage = localResponse.voteAverage,
+                    voteCount = 1
+                )
+
+                MovieDetailUiState.Success(pelicula)
             } catch (e: HttpException) {
                 MovieDetailUiState.Error
 
@@ -56,7 +80,8 @@ class MovieDetailsViewModel(
             initializer {
                 val application = (this[APPLICATION_KEY] as PeliculasApplication)
                 val peliculasRepository = application.container.peliculasRepository
-                MovieDetailsViewModel(peliculasRepository, idPelicula = idPelicula)
+                val peliculasDao = application.database.peliculasDao()
+                MovieDetailsViewModel(peliculasRepository, peliculasDao, idPelicula = idPelicula)
             }
         }
     }
