@@ -1,6 +1,7 @@
 package mx.ipn.escom.bautistas.peliculas.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -29,11 +30,18 @@ fun PeliculasApp(
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: ""
+    val peliculasViewModel: PeliculasViewModel =
+        viewModel(factory = PeliculasViewModel.Factory)
 
     Scaffold(modifier = modifier, topBar = {
         PeliculasTopBar(
+            modifier.height(60.dp),
             currentRoute = currentRoute,
-            canNavigateBack = navController.previousBackStackEntry != null
+            canNavigateBack = navController.previousBackStackEntry != null,
+            searching = peliculasViewModel.searchInput,
+            filterMoviesByString = {
+                peliculasViewModel.filterMoviesByString(it)
+            },
         ) {
             navController.navigateUp()
         }
@@ -48,8 +56,6 @@ fun PeliculasApp(
                     SplashScreen(navController = navController)
                 }
                 composable(Routes.Home.route) {
-                    val peliculasViewModel: PeliculasViewModel =
-                        viewModel(factory = PeliculasViewModel.Factory)
 
                     HomeScreen(
                         peliculasUiState = peliculasViewModel.peliculasUiState,
