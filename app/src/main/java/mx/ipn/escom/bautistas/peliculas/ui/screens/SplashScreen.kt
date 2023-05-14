@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import mx.ipn.escom.bautistas.peliculas.R
-import mx.ipn.escom.bautistas.peliculas.ui.PeliculasRoutes
+import mx.ipn.escom.bautistas.peliculas.ui.Routes
 
 @Composable
 fun SplashScreen(modifier: Modifier = Modifier, navController: NavController) {
@@ -62,7 +62,11 @@ fun LoadingAnimation(
                 )
             )
             delay(3000L)
-            navController.navigate(PeliculasRoutes.Home.name)
+            navController.navigate(Routes.Home.route){
+                popUpTo(Routes.SplashScreen.route) {
+                    inclusive = true
+                }
+            }
         }
     }
 
