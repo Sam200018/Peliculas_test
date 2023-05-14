@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.filter
 import mx.ipn.escom.bautistas.peliculas.R
@@ -61,7 +63,7 @@ fun MovieLists(
     Column(
         modifier.fillMaxSize(),
     ) {
-        Text(text = stringResource(id = R.string.top_movies_label))
+        Text(text = stringResource(id = R.string.top_movies_label), color = MaterialTheme.colors.primary, fontSize = 20.sp)
         LazyRow(
             state = topMoviesListState,
             horizontalArrangement = Arrangement.spacedBy(20.dp)
@@ -80,7 +82,7 @@ fun MovieLists(
                 peliculasViewModel.loadMoreTopMovies()
             }
         }
-        Text(text = stringResource(id = R.string.on_cinema_label))
+        Text(text = stringResource(id = R.string.on_cinema_label),color = MaterialTheme.colors.primary, fontSize = 20.sp)
         LazyRow(
             state = onCinemaListState,
             horizontalArrangement = Arrangement.spacedBy(20.dp)
