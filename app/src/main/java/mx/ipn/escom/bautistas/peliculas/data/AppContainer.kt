@@ -27,5 +27,4 @@ class DefaultAppContainer : AppContainer {
     override val peliculasRepository: PeliculasRepository by lazy {
         NetworkPeliculasRepository(retrofitService)
     }
-
 }
